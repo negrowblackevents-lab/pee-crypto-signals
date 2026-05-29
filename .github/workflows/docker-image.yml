@@ -34,8 +34,8 @@ jobs:
           context: .
           file: crypto_trading_backend/Dockerfile
           platforms: linux/amd64
-          push: true
-          tags: ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:latest
+          push: ${{ github.event_name == 'push' }}
+          tags: ghcr.io/${{ github.repository }}:latest
 
       - name: Image info
         run: echo "Image pushed to GHCR (if configured)."
