@@ -14,6 +14,13 @@ uvicorn crypto_trading_backend.main:app --reload
 
 Open `http://127.0.0.1:8000/` and the docs at `http://127.0.0.1:8000/docs`.
 
+If your frontend runs from a different origin, set `CORS_ORIGINS` before starting the backend, for example:
+
+```powershell
+$env:CORS_ORIGINS = "http://localhost:3000,http://127.0.0.1:3000"
+uvicorn crypto_trading_backend.main:app --reload
+```
+
 ## Configure FCM (Push Notifications)
 
 This backend can send push notifications via Firebase Cloud Messaging (FCM) using the Firebase Admin SDK.

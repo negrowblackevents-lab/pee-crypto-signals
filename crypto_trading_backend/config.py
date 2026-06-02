@@ -28,6 +28,7 @@ class Settings:
 
     APP_NAME: str = "CryptoSignal Engine"
     VERSION: str = "1.0.0"
+    CORS_ORIGINS: str = os.getenv("CORS_ORIGINS", "*")
     UPDATE_INTERVAL_SECONDS: int = int(os.getenv("UPDATE_INTERVAL_SECONDS", "300"))
 
     NEW_COIN_MIN_VOLUME_USD: float = float(os.getenv("NEW_COIN_MIN_VOLUME_USD", "5000000"))
