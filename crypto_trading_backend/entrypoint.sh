@@ -2,7 +2,7 @@
 set -e
 
 SECRETS_PATH="/run/secrets/firebase-service-account.json"
-TARGET_PATH="/app/firebase-service-account.json"
+TARGET_PATH="/app/crypto_trading_backend/firebase-service-account.json"
 
 if [ -n "${FIREBASE_SERVICE_ACCOUNT_JSON:-}" ] && [ ! -f "$TARGET_PATH" ]; then
   echo "$FIREBASE_SERVICE_ACCOUNT_JSON" > "$TARGET_PATH"
