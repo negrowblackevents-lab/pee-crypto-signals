@@ -2,9 +2,10 @@ name: CI - Build and Push Docker image
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, dockerize/deploy ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, dockerize/deploy ]
+  workflow_dispatch:
 
 jobs:
   build:

@@ -11,15 +11,17 @@ docker compose up --build -d
 ```
 
 - The backend will be reachable at `http://localhost:8001`.
-- The compose file mounts `firebase-service-account.json` and `app.sqlite3` from the repo root. Do NOT commit secrets to git.
+- The compose file mounts `firebase-service-account.json` and `app.sqlite3` from `crypto_trading_backend/`. Do NOT commit secrets to git.
 - The Dockerfile also supports runtime secret injection for Firebase credentials via:
   - `FIREBASE_SERVICE_ACCOUNT_PATH=/run/secrets/firebase-service-account.json`, or
   - `FIREBASE_SERVICE_ACCOUNT_JSON` containing the JSON payload.
 
 ## Container registry (GitHub Container Registry)
 
-1. Push to `main` branch. The GitHub Action `.github/workflows/docker-image.yml` builds and pushes the image to `ghcr.io/<owner>/<repo>:latest` if `GITHUB_TOKEN` is available.
+1. Push to `main` or `dockerize/deploy` branch. The GitHub Action `.github/workflows/docker-image.yml` builds and pushes the image to `ghcr.io/<owner>/<repo>:latest` if `GITHUB_TOKEN` is available.
 2. Add `CR_PAT` or `GITHUB_TOKEN` as repository secrets to allow pushing to GHCR for non-owner accounts.
+
+This workflow also supports manual runs via GitHub Actions `workflow_dispatch`.
 
 ## Render / Heroku / Cloud Run (example)
 
@@ -29,8 +31,8 @@ docker compose up --build -d
 2. Connect your GitHub repository.
 3. For the Docker build, point to `crypto_trading_backend/Dockerfile`.
 4. Set the start command to:
-   - `uvicorn main:app --host 0.0.0.0 --port 8000`
-5. Add a secret or file for `firebase-service-account.json` in Render and mount it at `/app/firebase-service-account.json`.
+   - `uvicorn crypto_trading_backend.main:app --host 0.0.0.0 --port 8000`
+5. Add a secret or file for `firebase-service-account.json` in Render and mount it at `/app/crypto_trading_backend/firebase-service-account.json`.
 
 ### Heroku
 
@@ -49,7 +51,7 @@ Then add any required config vars from `.env` in the Heroku dashboard.
 
 1. Build and push the image to Artifact Registry or Google Container Registry.
 2. Deploy to Cloud Run with port `8000`.
-3. Configure secrets so `firebase-service-account.json` is available at `/app/firebase-service-account.json` or update the app to load credentials from environment variables.
+3. Configure secrets so `firebase-service-account.json` is available at `/app/crypto_trading_backend/firebase-service-account.json` or update the app to load credentials from environment variables.
 
 ## Secrets and service account
 
