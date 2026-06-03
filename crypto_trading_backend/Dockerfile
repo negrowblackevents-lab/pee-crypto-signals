@@ -6,10 +6,10 @@ ENV PYTHONUNBUFFERED=1 \
 WORKDIR /app
 
 # Install system deps (if needed)
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
     build-essential \
     gcc \
- && rm -rf /var/lib/apt/lists/*
+ && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements and install
 COPY crypto_trading_backend/requirements.txt /app/requirements.txt
