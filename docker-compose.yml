@@ -1,10 +1,10 @@
 services:
   backend:
     build:
-      context: .
-      dockerfile: crypto_trading_backend/Dockerfile
+      context: ./crypto_trading_backend
+      dockerfile: Dockerfile
     ports:
-      - "8001:8000" # host:container
+      - "8001:8000"
     environment:
       - UPDATE_INTERVAL_SECONDS=300
       - FIREBASE_SERVICE_ACCOUNT_PATH=/run/secrets/firebase-service-account.json
