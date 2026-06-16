@@ -69,6 +69,19 @@ class UserLogin(BaseModel):
     password: str
 
 
+class BalanceHistoryItem(BaseModel):
+    timestamp: datetime
+    balance_usdt: float
+    pnl_24h: float
+    positions_count: int
+
+
+class BalanceHistoryResponse(BaseModel):
+    user_id: int
+    items: list[BalanceHistoryItem]
+    current_balance: float
+
+
 class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"

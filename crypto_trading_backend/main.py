@@ -14,6 +14,8 @@ from .auth import create_access_token, decode_token, hash_password, verify_passw
 from .binance_public import BinancePublicClient
 from .config import settings
 from .models import (
+    BalanceHistoryItem,
+    BalanceHistoryResponse,
     PortfolioResponse,
     SignalResponse,
     TokenResponse,
@@ -179,6 +181,16 @@ async def user_trade(payload: TradeRequest, user_id: int = Depends(_require_user
         status="FILLED",
         mode=_mode(),
     )
+    
+    # Record balance snapshot after trade
+    portfolio = user_portfolio(user_id=user_id)
+    dbmod.insert_balance_history(
+        user_id=user_id,
+        balance_usdt=portfolio.balance_usdt,
+        pnl_24h=portfolio.pnl_24h,
+        positions_count=len(portfolio.positions),
+    )
+    
     warning = "Paper trade only. Validate strategy before risking capital."
     return TradeResponse(
         order_id=trade_id,
@@ -220,6 +232,26 @@ def user_portfolio(user_id: int = Depends(_require_user_id)) -> PortfolioRespons
         mode=_mode(),
         daily_trades_count=min(len(rows), settings.MAX_DAILY_TRADES),
         pnl_24h=0.0,
+    )
+
+
+@app.get("/user/portfolio/history", response_model=BalanceHistoryResponse)
+def user_portfolio_history(user_id: int = Depends(_require_user_id), limit: int = 365) -> BalanceHistoryResponse:
+    rows = dbmod.list_balance_history(user_id=user_id, limit=limit)
+    portfolio = user_portfolio(user_id=user_id)
+    items = [
+        BalanceHistoryItem(
+            timestamp=datetime.fromisoformat(r["created_at"]),
+            balance_usdt=r["balance_usdt"],
+            pnl_24h=r["pnl_24h"],
+            positions_count=r["positions_count"],
+        )
+        for r in rows
+    ]
+    return BalanceHistoryResponse(
+        user_id=user_id,
+        items=items,
+        current_balance=portfolio.balance_usdt,
     )
 
 

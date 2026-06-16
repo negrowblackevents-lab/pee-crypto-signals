@@ -81,6 +81,19 @@ def init_db() -> None:
             )
             """
         )
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS balance_history (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                balance_usdt REAL NOT NULL,
+                pnl_24h REAL NOT NULL DEFAULT 0.0,
+                positions_count INTEGER NOT NULL DEFAULT 0,
+                created_at TEXT NOT NULL,
+                FOREIGN KEY(user_id) REFERENCES users(id)
+            )
+            """
+        )
 
 
 @contextmanager
@@ -193,4 +206,23 @@ def insert_signal_history(
 def list_signal_history(limit: int = 200) -> list[sqlite3.Row]:
     with db() as conn:
         return conn.execute("SELECT * FROM signal_history ORDER BY created_at DESC LIMIT ?", (limit,)).fetchall()
+
+
+def insert_balance_history(user_id: int, balance_usdt: float, pnl_24h: float = 0.0, positions_count: int = 0) -> None:
+    with db() as conn:
+        conn.execute(
+            """
+            INSERT INTO balance_history(user_id, balance_usdt, pnl_24h, positions_count, created_at)
+            VALUES(?,?,?,?,?)
+            """,
+            (user_id, balance_usdt, pnl_24h, positions_count, _utc_now_iso()),
+        )
+
+
+def list_balance_history(user_id: int, limit: int = 365) -> list[sqlite3.Row]:
+    with db() as conn:
+        return conn.execute(
+            "SELECT * FROM balance_history WHERE user_id = ? ORDER BY created_at ASC LIMIT ?",
+            (user_id, limit),
+        ).fetchall()
 
