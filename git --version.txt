@@ -1,0 +1,5 @@
+git --version
+git checkout -b dockerize/deploy
+git add .
+git commit -m "Add Dockerfile, docker-compose, CI workflow, and DEPLOYMENT.md"
+git push --set-upstream origin dockerize/deploy

@@ -1,0 +1,14 @@
+services:
+  backend:
+    build:
+      context: ./crypto_trading_backend
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8000"
+    environment:
+      - UPDATE_INTERVAL_SECONDS=300
+      - FIREBASE_SERVICE_ACCOUNT_PATH=/run/secrets/firebase-service-account.json
+    volumes:
+      - ./crypto_trading_backend/firebase-service-account.json:/run/secrets/firebase-service-account.json:ro
+      - ./crypto_trading_backend/app.sqlite3:/app/crypto_trading_backend/app.sqlite3
+    restart: unless-stopped

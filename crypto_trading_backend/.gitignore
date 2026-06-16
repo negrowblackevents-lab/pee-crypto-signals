@@ -1,0 +1,8 @@
+.env
+firebase-service-account.json
+*.sqlite3
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.venv/
+

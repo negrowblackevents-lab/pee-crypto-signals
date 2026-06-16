@@ -1,0 +1,47 @@
+name: crypto_trading_app
+description: "Crypto Trading App for visualizing portfolio performance with real-time balance tracking."
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.0.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # UI and Charts
+  fl_chart: ^0.68.0
+  
+  # HTTP and JSON
+  http: ^1.2.0
+  
+  # State management (optional, can add later)
+  provider: ^6.4.0
+  
+  # Secure storage
+  flutter_secure_storage: ^9.0.0
+  
+  # Date/Time utilities
+  intl: ^0.19.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  
+  # Assets example (uncomment and add images as needed)
+  # assets:
+  #   - assets/images/
+  #
+  # fonts:
+  #   - family: CustomFont
+  #     fonts:
+  #       - asset: assets/fonts/CustomFont-Regular.ttf
+  #       - asset: assets/fonts/CustomFont-Bold.ttf
+  #         weight: 700
